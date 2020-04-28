@@ -41,6 +41,5 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 # for reference.
 # -------------------------------------------------------------------------------------
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
-    && ln -s /usr/local/bin/docker-entrypoint.sh / # backwards compat
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["tini", "--", "/usr/local/bin/docker-entrypoint.sh"]
