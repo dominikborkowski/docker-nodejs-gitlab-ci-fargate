@@ -31,8 +31,7 @@ RUN curl -Lo /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.ama
     # like that.
     && gitlab-runner --version
 
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
-    && apt-get install git-lfs \
+RUN apt-get install -y git-lfs \
     && git lfs install --skip-repo
 
 # -------------------------------------------------------------------------------------
