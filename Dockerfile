@@ -1,4 +1,4 @@
-FROM node:12.16.1
+FROM node:12.16
 
 # ---------------------------------------------------------------------
 # Install https://github.com/krallin/tini - a very small 'init' process
@@ -31,7 +31,8 @@ RUN curl -Lo /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.ama
     # like that.
     && gitlab-runner --version
 
-RUN apt-get install -y git-lfs \
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
+    && apt-get install git-lfs \
     && git lfs install --skip-repo
 
 # -------------------------------------------------------------------------------------
