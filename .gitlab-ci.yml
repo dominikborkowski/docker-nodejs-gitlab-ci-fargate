@@ -22,7 +22,7 @@ ci:test:
   stage: ci:test
   script:
     - docker pull $CONTAINER_CI_IMAGE
-    # - docker run $CONTAINER_CI_IMAGE /script/to/run/tests
+    - docker run --entrypoint "" --rm $CONTAINER_CI_IMAGE /bin/sh -c "$(cat ./test-image.sh)"
 
 ci:delete-image:
   stage: ci:clean

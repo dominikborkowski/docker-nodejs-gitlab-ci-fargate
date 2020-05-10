@@ -25,11 +25,7 @@ EXPOSE 22
 ARG GITLAB_RUNNER_VERSION=v12.9.0
 
 RUN curl -Lo /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/${GITLAB_RUNNER_VERSION}/binaries/gitlab-runner-linux-amd64 \
-    && chmod +x /usr/local/bin/gitlab-runner \
-    # Test if the downloaded file was indeed a binary and not, for example,
-    # an HTML page representing S3's internal server error message or something
-    # like that.
-    && gitlab-runner --version
+    && chmod +x /usr/local/bin/gitlab-runner
 
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
     && apt-get install git-lfs \
