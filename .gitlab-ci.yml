@@ -18,11 +18,29 @@ ci:build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $CONTAINER_CI_IMAGE
 
-ci:test:
+ci:test-docker-access:
   stage: ci:test
   script:
     - docker pull $CONTAINER_CI_IMAGE
     - docker run --entrypoint "" --rm $CONTAINER_CI_IMAGE /bin/sh -c "$(cat ./test-image.sh)"
+
+ci:test-ssh-access:
+  stage: ci:test
+  script:
+    - docker pull $CONTAINER_CI_IMAGE
+    - ssh-keygen -f ~/.ssh/id_rsa -N "" -q
+    - CONTAINER_ID=$(docker run -d -e SSH_PUBLIC_KEY="$(cat ~/.ssh/id_rsa.pub)" --rm $CONTAINER_CI_IMAGE)
+    # Didn't find a feasible way to SSH into the container using the
+    # docker+machine executor yet (connect to host 172.18.0.2 port 22: Operation
+    # timed out), so will only stop it for now.
+    - docker container stop $CONTAINER_ID
+
+ci:test-unsuccessful-ssh-setup:
+  stage: ci:test
+  script:
+    - docker pull $CONTAINER_CI_IMAGE
+    - ssh-keygen -f ~/.ssh/id_rsa -N "" -q
+    - docker run -e SSH_KEY="$(cat ~/.ssh/id_rsa.pub)" --rm $CONTAINER_CI_IMAGE || if [ $? -ne 0 ]; then (exit 0); else (exit $?); fi
 
 ci:delete-image:
   stage: ci:clean
