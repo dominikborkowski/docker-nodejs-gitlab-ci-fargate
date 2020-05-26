@@ -18,7 +18,7 @@ ci:build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $CONTAINER_CI_IMAGE
 
-ci:test-docker-access:
+ci:test-image:
   stage: ci:test
   script:
     - docker pull $CONTAINER_CI_IMAGE
