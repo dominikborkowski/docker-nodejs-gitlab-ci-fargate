@@ -1,4 +1,4 @@
-FROM node:12.16
+FROM node:16
 
 # ---------------------------------------------------------------------
 # Install https://github.com/krallin/tini - a very small 'init' process
@@ -15,14 +15,23 @@ RUN curl -Lo /usr/local/bin/tini https://github.com/krallin/tini/releases/downlo
 # --------------------------------------------------------------------------
 RUN apt-get update \
     && apt-get install -y openssh-server \
+    && apt-get -y install bash git curl nano jq less rsync zip unzip groff \
     && mkdir -p /var/run/sshd
+
+RUN wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip \
+    && unzip aws-sam-cli-linux-x86_64.zip -d sam-installation \
+    && ./sam-installation/install \
+    && rm aws-sam-cli-linux-x86_64.zip \
+    && rm -rf ./sam-installation \
+    && sam --version
+
 
 EXPOSE 22
 
 # ----------------------------------------
 # Install GitLab CI required dependencies.
 # ----------------------------------------
-ARG GITLAB_RUNNER_VERSION=v12.9.0
+ARG GITLAB_RUNNER_VERSION=v16.2.1
 
 RUN curl -Lo /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/${GITLAB_RUNNER_VERSION}/binaries/gitlab-runner-linux-amd64 \
     && chmod +x /usr/local/bin/gitlab-runner
