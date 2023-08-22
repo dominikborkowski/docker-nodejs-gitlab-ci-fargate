@@ -1,0 +1,9 @@
+version: '3'
+services:
+
+  docker-nodejs-gitlab-ci-fargate:
+    container_name: 'docker-nodejs-gitlab-ci-fargate'
+    build:
+      context: ./
+    image: dominikborkowski/docker-nodejs-gitlab-ci-fargate:${TAG:-latest}
+    platform: ${PLATFORM:-linux/amd64}
